@@ -2,35 +2,37 @@ package daatguy.lovecraft.item;
 
 import java.util.List;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import daatguy.lovecraft.item.interfaces.ItemDescription;
 
-public class ItemSimple extends Item {
+public class ItemSimple extends Item implements ItemDescription{
 	
-	protected static int loreLineThreshhold = 25;
-
+	public EnumRarity rarity;
+	
+	public ItemSimple() {
+		super();
+		this.rarity = EnumRarity.COMMON;
+	}
+	
+	public ItemSimple(EnumRarity rarity) {
+		super();
+		this.rarity = rarity;
+	}
+	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn,
 			List<String> tooltip, ITooltipFlag flagIn) {
-		//super.addInformation(stack, worldIn, tooltip, flagIn);
-		if (!I18n.format(((Item)this).getUnlocalizedName() + ".description").equals(((Item)this).getUnlocalizedName() + ".description")) {
-			String rawLore[] = I18n.format(((Item)this).getUnlocalizedName() + ".description").split(
-					"\\s+");
-			String curLine = "";
-			for (String word : rawLore) {
-				curLine = curLine + word + " ";
-				if (curLine.length() > loreLineThreshhold) {
-					tooltip.add(curLine.trim());
-					curLine = "";
-				}
-			}
-			if (curLine != "") {
-				tooltip.add(curLine.trim());
-			}
-		}
+		addDescriptionTooltip(stack, worldIn, tooltip, flagIn);
 	}
-
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack)
+    {
+        return rarity;
+    }
+	
 }
