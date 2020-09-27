@@ -18,8 +18,8 @@ public class RegistryHandler {
 	
 	@SubscribeEvent
     public static void onPotionRegister(RegistryEvent.Register<Potion> event) {
-		event.getRegistry().register(LovecraftMain.potionDread);
-		event.getRegistry().register(LovecraftMain.potionAwake);
+		//event.getRegistry().register(LovecraftMain.potionDread);
+		//event.getRegistry().register(LovecraftMain.potionAwake);
 		event.getRegistry().register(LovecraftMain.potionDrugged);
 	}
 	
@@ -36,6 +36,10 @@ public class RegistryHandler {
 		event.getRegistry().register(LovecraftMain.itemFleshDust);
 		event.getRegistry().register(LovecraftMain.itemMummyChunk);
 		event.getRegistry().register(LovecraftMain.itemFleshChunk);
+		event.getRegistry().register(LovecraftMain.itemSpoiledFleshChunk);
+		event.getRegistry().register(LovecraftMain.itemSpoiledFleshDust);
+		event.getRegistry().register(LovecraftMain.itemPreservedFleshChunk);
+		event.getRegistry().register(LovecraftMain.itemPreservedFleshDust);
 		event.getRegistry().register(LovecraftMain.itemMagnifyingGlass);
 		event.getRegistry().register(LovecraftMain.itemTome);
 		event.getRegistry().register(LovecraftMain.itemBook);
@@ -43,6 +47,10 @@ public class RegistryHandler {
 		event.getRegistry().register(LovecraftMain.itemFossilKnife);
 		event.getRegistry().register(LovecraftMain.itemDriedFlower);
 		event.getRegistry().register(LovecraftMain.itemRubbing);
+		event.getRegistry().register(LovecraftMain.itemTokenBat);
+		event.getRegistry().register(LovecraftMain.itemTokenDread);
+		event.getRegistry().register(LovecraftMain.itemTokenAwake);
+		event.getRegistry().register(LovecraftMain.itemTokenBrave);
 
 		event.getRegistry().register(LovecraftMain.itemBlockUnderstructure);
 		event.getRegistry().register(LovecraftMain.itemBlockFlowerDrug);
@@ -148,13 +156,48 @@ public class RegistryHandler {
 						LovecraftMain.itemFleshChunk.getRegistryName(),
 						"inventory"));
 		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemSpoiledFleshChunk, 0, new ModelResourceLocation(
+						LovecraftMain.itemSpoiledFleshChunk.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemSpoiledFleshDust, 0, new ModelResourceLocation(
+						LovecraftMain.itemSpoiledFleshDust.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemPreservedFleshChunk, 0, new ModelResourceLocation(
+						LovecraftMain.itemPreservedFleshChunk.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemPreservedFleshDust, 0, new ModelResourceLocation(
+						LovecraftMain.itemPreservedFleshDust.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
 				LovecraftMain.itemMagnifyingGlass, 0, new ModelResourceLocation(
 						LovecraftMain.itemMagnifyingGlass.getRegistryName(),
 						"inventory"));
 		ModelLoader.setCustomModelResourceLocation(
 				LovecraftMain.itemRubbing, 0, new ModelResourceLocation(
 						LovecraftMain.itemRubbing.getRegistryName(),
-						"inventory")); //might want to do some subitemhandler stuff in future?
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemTokenBat, 0, new ModelResourceLocation(
+						LovecraftMain.itemTokenBat.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemTokenDread, 0, new ModelResourceLocation(
+						LovecraftMain.itemTokenDread.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemTokenAwake, 0, new ModelResourceLocation(
+						LovecraftMain.itemTokenAwake.getRegistryName(),
+						"inventory"));
+		ModelLoader.setCustomModelResourceLocation(
+				LovecraftMain.itemTokenBrave, 0, new ModelResourceLocation(
+						LovecraftMain.itemTokenBrave.getRegistryName(),
+						"inventory"));
+		
+		
+		//might want to do some subitemhandler stuff in future?
 		((ItemTome)LovecraftMain.itemTome).initModel();
 		((ItemBook)LovecraftMain.itemBook).initModel();
 		((ItemFossil)LovecraftMain.itemFossil).initModel();

@@ -7,6 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
@@ -44,6 +45,7 @@ import daatguy.lovecraft.book.DeskHandler;
 import daatguy.lovecraft.book.spell.SpellHandler;
 import daatguy.lovecraft.container.AlchemyRecipes;
 import daatguy.lovecraft.container.LovecraftTab;
+import daatguy.lovecraft.entity.EntityLeyline;
 import daatguy.lovecraft.entity.EntitySpell;
 import daatguy.lovecraft.entity.eldritch.EldritchMobHandler;
 import daatguy.lovecraft.entity.eldritch.EntityUrhag;
@@ -57,6 +59,7 @@ import daatguy.lovecraft.generator.village.VillageCreationHandler;
 import daatguy.lovecraft.generator.village.VillageOpiumDen;
 import daatguy.lovecraft.item.ItemBeaker;
 import daatguy.lovecraft.item.ItemBook;
+import daatguy.lovecraft.item.ItemDecay;
 import daatguy.lovecraft.item.ItemEmptyBeaker;
 import daatguy.lovecraft.item.ItemFossil;
 import daatguy.lovecraft.item.ItemFossilDust;
@@ -64,6 +67,7 @@ import daatguy.lovecraft.item.ItemFossilKnife;
 import daatguy.lovecraft.item.ItemRubbing;
 import daatguy.lovecraft.item.ItemSimple;
 import daatguy.lovecraft.item.ItemSimpleBlock;
+import daatguy.lovecraft.item.ItemTokenDread;
 import daatguy.lovecraft.item.ItemTome;
 import daatguy.lovecraft.item.SubItemsHandler;
 import daatguy.lovecraft.networking.PacketHandler;
@@ -72,6 +76,7 @@ import daatguy.lovecraft.tileentity.TileEntityCarving;
 import daatguy.lovecraft.tileentity.TileEntityChargedObelisk;
 import daatguy.lovecraft.tileentity.TileEntityHookah;
 import daatguy.lovecraft.world.WorldProviderRoom;
+import daatguy.lovecraft.world.leyline.LeylineHandler;
 import daatguy.lovecraft.world.potion.PotionDrugged;
 import daatguy.lovecraft.world.potion.PotionStatus;
 import daatguy.lovecraft.world.storage.loot.functions.SetLovecraftBook;
@@ -98,6 +103,8 @@ public class LovecraftMain {
 	
 	public static EldritchMobHandler eldritchMobHandler = new EldritchMobHandler();
 	
+	public static LeylineHandler leylineHandler = new LeylineHandler();
+	
 	//public static LengGenerator lengGenerator = new LengGenerator();
 	
 	//For use for the potionDrugged
@@ -106,8 +113,8 @@ public class LovecraftMain {
 	public int motionBlurShader = 0;
 	
 	//Potion Refs
-	public static Potion potionDread;
-	public static Potion potionAwake;
+	//public static Potion potionDread;
+	//public static Potion potionAwake;
 	public static Potion potionDrugged;
 	
 	//Tool Material Declarations
@@ -125,6 +132,10 @@ public class LovecraftMain {
 	public static Item itemFleshDust;
 	public static Item itemMummyChunk;
 	public static Item itemFleshChunk;
+	public static Item itemSpoiledFleshDust;
+	public static Item itemSpoiledFleshChunk;
+	public static Item itemPreservedFleshDust;
+	public static Item itemPreservedFleshChunk;
 	public static Item itemMagnifyingGlass;
 	public static Item itemTome;
 	public static Item itemBook;
@@ -132,6 +143,10 @@ public class LovecraftMain {
 	public static Item itemDriedFlower;
 	public static Item itemRubbing;
 	public static Item itemFossilKnife;
+	public static Item itemTokenBat;
+	public static Item itemTokenDread;
+	public static Item itemTokenAwake;
+	public static Item itemTokenBrave;
 
 	//More 'item' declarations, ItemBlocks
 	public static Item itemBlockUnderstructure;
@@ -237,20 +252,40 @@ public class LovecraftMain {
 		itemMummyDust.setRegistryName("mummy_dust");
 		itemMummyDust.setCreativeTab(lovecraftTab);
 		
-		itemFleshDust = new ItemSimple(EnumRarity.UNCOMMON);
-		itemFleshDust.setUnlocalizedName("flesh_dust");
-		itemFleshDust.setRegistryName("flesh_dust");
-		itemFleshDust.setCreativeTab(lovecraftTab);
-		
 		itemMummyChunk = new ItemSimple();
 		itemMummyChunk.setUnlocalizedName("mummy_chunk");
 		itemMummyChunk.setRegistryName("mummy_chunk");
 		itemMummyChunk.setCreativeTab(lovecraftTab);
-		
-		itemFleshChunk = new ItemSimple(EnumRarity.UNCOMMON);
+
+		itemSpoiledFleshChunk = new ItemSimple(EnumRarity.UNCOMMON);
+		itemSpoiledFleshChunk.setUnlocalizedName("spoiled_flesh_chunk");
+		itemSpoiledFleshChunk.setRegistryName("spoiled_flesh_chunk");
+		itemSpoiledFleshChunk.setCreativeTab(lovecraftTab);
+
+		itemFleshChunk = new ItemDecay(EnumRarity.UNCOMMON, 1800, false, new ItemStack(itemSpoiledFleshChunk));
 		itemFleshChunk.setUnlocalizedName("flesh_chunk");
 		itemFleshChunk.setRegistryName("flesh_chunk");
 		itemFleshChunk.setCreativeTab(lovecraftTab);
+
+		itemSpoiledFleshDust = new ItemSimple(EnumRarity.UNCOMMON);
+		itemSpoiledFleshDust.setUnlocalizedName("spoiled_flesh_dust");
+		itemSpoiledFleshDust.setRegistryName("spoiled_flesh_dust");
+		itemSpoiledFleshDust.setCreativeTab(lovecraftTab);
+		
+		itemFleshDust = new ItemDecay(EnumRarity.UNCOMMON, 1800, false, new ItemStack(itemSpoiledFleshDust));
+		itemFleshDust.setUnlocalizedName("flesh_dust");
+		itemFleshDust.setRegistryName("flesh_dust");
+		itemFleshDust.setCreativeTab(lovecraftTab);
+
+		itemPreservedFleshChunk = new ItemSimple(EnumRarity.UNCOMMON);
+		itemPreservedFleshChunk.setUnlocalizedName("preserved_flesh_chunk");
+		itemPreservedFleshChunk.setRegistryName("preserved_flesh_chunk");
+		itemPreservedFleshChunk.setCreativeTab(lovecraftTab);
+
+		itemPreservedFleshDust = new ItemSimple(EnumRarity.UNCOMMON);
+		itemPreservedFleshDust.setUnlocalizedName("preserved_flesh_dust");
+		itemPreservedFleshDust.setRegistryName("preserved_flesh_dust");
+		itemPreservedFleshDust.setCreativeTab(lovecraftTab);
 		
 		itemMagnifyingGlass = new ItemSimple();
 		itemMagnifyingGlass.setUnlocalizedName("magnifying_glass");
@@ -277,6 +312,26 @@ public class LovecraftMain {
 		itemDriedFlower.setUnlocalizedName("dried_flower");
 		itemDriedFlower.setRegistryName("dried_flower");
 		itemDriedFlower.setCreativeTab(lovecraftTab);
+		
+		itemTokenBat = new ItemDecay(EnumRarity.COMMON, 12000, true);
+		itemTokenBat.setUnlocalizedName("token_bat");
+		itemTokenBat.setRegistryName("token_bat");
+		itemTokenBat.setCreativeTab(lovecraftTab);
+		
+		itemTokenDread = new ItemTokenDread(EnumRarity.COMMON, 12000, true);
+		itemTokenDread.setUnlocalizedName("token_dread");
+		itemTokenDread.setRegistryName("token_dread");
+		itemTokenDread.setCreativeTab(lovecraftTab);
+		
+		itemTokenAwake = new ItemDecay(EnumRarity.COMMON, 12000, true);
+		itemTokenAwake.setUnlocalizedName("token_awake");
+		itemTokenAwake.setRegistryName("token_awake");
+		itemTokenAwake.setCreativeTab(lovecraftTab);
+		
+		itemTokenBrave = new ItemDecay(EnumRarity.COMMON, 12000, true);
+		itemTokenBrave.setUnlocalizedName("token_brave");
+		itemTokenBrave.setRegistryName("token_brave");
+		itemTokenBrave.setCreativeTab(lovecraftTab);
 		
 		blockFlowerDrug = new BlockFlowerDrug(Material.PLANTS);
 		blockFlowerDrug.setHardness(0.0f);
@@ -427,8 +482,8 @@ public class LovecraftMain {
 		itemBlockCarvedWeirdedBrick = new ItemSimpleBlock(blockCarvedWeirdedBrick).setRegistryName(blockCarvedWeirdedBrick.getRegistryName());
 		
 		//Initialize potions
-		potionDread = new PotionStatus(true, 14611199, 0, 0).setPotionName("effect.dread").setRegistryName("lovecraft:dread");
-		potionAwake = new PotionStatus(true, 16777113, 1, 0).setPotionName("effect.awake").setRegistryName("lovecraft:awake");
+		//potionDread = new PotionStatus(true, 14611199, 0, 0).setPotionName("effect.dread").setRegistryName("lovecraft:dread");
+		//potionAwake = new PotionStatus(true, 16777113, 1, 0).setPotionName("effect.awake").setRegistryName("lovecraft:awake");
 		potionDrugged = new PotionDrugged(true, 13369497, 2, 0).setPotionName("effect.drugged").setRegistryName("lovecraft:drugged");
 		
 		//Add world generators
@@ -460,6 +515,7 @@ public class LovecraftMain {
 		LovecraftMain.eldritchMobHandler.init();
 		EntityRegistry.registerModEntity(new ResourceLocation("lovecraft:spell"), EntitySpell.class, "lovecraftSpell", 0, instance, 0, 1, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("lovecraft:urhag"), EntityUrhag.class, "urhag", 1, instance, EntityUrhag.sightRange, 1, true, 14926261, 11380670);
+		EntityRegistry.registerModEntity(new ResourceLocation("lovecraft:leyline"), EntityLeyline.class, "leyline", 2, instance, 0, 1, false);
 		LovecraftMain.eldritchMobHandler.AFFECTED_ENTITIES.add(EntityUrhag.class);
 		
 		//Proxy Pre-Init
